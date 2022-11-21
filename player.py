@@ -1,5 +1,7 @@
 import random
+from dataclasses import dataclass
 
+playing = False
 chip_pool = 100
 restart_phrase = "Press d to deal the cards again, or press q to quit."
 all_cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
@@ -44,7 +46,7 @@ class Hand:
 
         if card == 'A':
             self.ace = True
-        self.game_points += all_cards_val[card]
+        self.game_points += all_cards_val[card[1]]
 
     def calculate_value(self):
 
@@ -60,17 +62,15 @@ class Hand:
         else:
             starting_card = 0
         for x in range(starting_card, len(self.cards)):
-            self.cards[x].draw()
+            self.cards[x].Cards.draw()
 
 
-class PlayingDeck():
+class PlayingDeck:
     def __init__(self):
         self.deck = []
         for suit in cards_symbols:
             for card in all_cards:
-                self.deck.append(Cards(suit, card))
-
-        print(self.deck)
+                self.deck.append((Cards(suit, card).suit, Cards(suit, card).value))
 
     def shuffle(self):
         random.shuffle(self.deck)
@@ -110,8 +110,7 @@ def deal_cards():
     game_deck = PlayingDeck()
 
     game_deck.shuffle()
-    print(game_deck.deck)
-    test = input()
+
     make_bet()
 
     player_hand = Hand()
@@ -189,7 +188,6 @@ def stand():
 
 
 def game_step():
-
     print("")
     print('Player Hand is: ', player_hand.draw(hidden=False))
 
@@ -240,7 +238,6 @@ Dealer hits until she reaches 17. Aces count as 1 or 11. Card output goes a lett
 
 
 if __name__ == "__main__":
-
     deck = PlayingDeck()
     deck.shuffle()
     player_hand = Hand()
