@@ -62,7 +62,7 @@ class Hand:
         else:
             starting_card = 0
         for x in range(starting_card, len(self.cards)):
-            self.cards[x].Cards.draw()
+            print(self.cards[x][0], self.cards[x][1])
 
 
 class PlayingDeck:
@@ -78,13 +78,6 @@ class PlayingDeck:
     def deal(self):
         hit_card = self.deck.pop()
         return hit_card
-
-    def __str__(self):
-        deck_comp = " "
-        for card in self.deck:
-            deck_comp += " " + deck_comp.__str__()
-
-        return "The deck has " + deck_comp
 
 
 def make_bet():
@@ -129,14 +122,19 @@ def deal_cards():
     game_step()
 
 
+def print_hand(hand):
+    for i in range(0, len(hand)):
+        print(hand[i][0], hand[i][1])
+
+
 def hit():
     global playing, chip_pool, deck, player_hand, dealer_hand, result, bet
 
     if playing is True:
         if player_hand.calculate_value() <= 21:
-            player_hand.hit(PlayingDeck.deal())
+            player_hand.hit(PlayingDeck().deal())
 
-        print("Player hand is %s" % player_hand)
+        print_hand(player_hand.cards)
 
         if player_hand.calculate_value() > 21:
             result = 'Busted!' + restart_phrase
@@ -162,7 +160,7 @@ def stand():
     else:
 
         while dealer_hand.calculate_value() < 17:
-            dealer_hand.card_add(PlayingDeck.deal())
+            dealer_hand.hit(PlayingDeck().deal())
 
         if dealer_hand.calculate_value() > 21:
             result = 'Dealer busts! You win! ' + restart_phrase
