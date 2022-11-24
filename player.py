@@ -35,11 +35,6 @@ class Hand:
         self.cards = []
         self.ace = False
 
-    def __str__(self):
-        for card in self.cards:
-            card_name = card.__str__()
-            print(card_name)
-
     def hit(self, card):
         self.cards.append(card)
 
@@ -97,7 +92,7 @@ def make_bet():
 
 
 def deal_cards():
-    global result, playing, deck, player_hand, dealer_hand, chip_pool, bet
+    global result, playing, player_hand, dealer_hand, chip_pool, game_deck
 
     game_deck = PlayingDeck()
 
@@ -112,6 +107,7 @@ def deal_cards():
     player_hand.hit(game_deck.deal())
     dealer_hand.hit(game_deck.deal())
     dealer_hand.hit(game_deck.deal())
+    print(len(game_deck.deck))
     result = "Hit or Stand? Press h for hit or s for stand: "
 
     if playing is True:
@@ -128,11 +124,11 @@ def print_hand(hand):
 
 
 def hit():
-    global playing, chip_pool, deck, player_hand, dealer_hand, result, bet
+    global playing, chip_pool, game_deck, player_hand, dealer_hand, result, bet
 
     if playing is True:
         if player_hand.calculate_value() <= 21:
-            player_hand.hit(PlayingDeck().deal())
+            player_hand.hit(game_deck.deal())
 
         print_hand(player_hand.cards)
 
@@ -149,7 +145,7 @@ def hit():
 
 
 def stand():
-    global playing, chip_pool, deck, player_hand, dealer_hand, result, bet
+    global playing, chip_pool, player_hand, dealer_hand, result, bet, game_deck
 
     '''This function plays the dealers hand, since stand was chosen'''
 
@@ -160,7 +156,7 @@ def stand():
     else:
 
         while dealer_hand.calculate_value() < 17:
-            dealer_hand.hit(PlayingDeck().deal())
+            dealer_hand.hit(game_deck.deal())
 
         if dealer_hand.calculate_value() > 21:
             result = 'Dealer busts! You win! ' + restart_phrase
@@ -235,10 +231,6 @@ Dealer hits until she reaches 17. Aces count as 1 or 11. Card output goes a lett
 
 
 if __name__ == "__main__":
-    deck = PlayingDeck()
-    deck.shuffle()
-    player_hand = Hand()
-    dealer_hand = Hand()
 
     intro()
     deal_cards()
