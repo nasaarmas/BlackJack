@@ -1,13 +1,12 @@
 import random
-from dataclasses import dataclass
 
 playing = False
 chip_pool = 100
 restart_phrase = "Press d to deal the cards again, or press q to quit."
 all_cards = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 cards_symbols = ("clubs", "spades", "hearts", "diamonds")
-all_cards_val = {'2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'J': 10, 'Q': 10, 'K': 10,
-                 'A': 11}
+all_cards_val = {'A': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, 'J': 10, 'Q': 10,
+                 'K': 10}
 
 
 class Cards:
@@ -111,7 +110,8 @@ def deal_cards():
 
     player_hand.hit(game_deck.deal())
     player_hand.hit(game_deck.deal())
-
+    dealer_hand.hit(game_deck.deal())
+    dealer_hand.hit(game_deck.deal())
     result = "Hit or Stand? Press h for hit or s for stand: "
 
     if playing is True:
@@ -187,20 +187,19 @@ def stand():
 
 def game_step():
     print("")
-    print('Player Hand is: ', player_hand.draw(hidden=False))
-
+    print('Player Hand is: ')
+    player_hand.draw(hidden=False)
     print('')
     print('Player hand total is: ' + str(player_hand.calculate_value()))
-
     print('')
-    print('Dealer Hand is: ', dealer_hand.draw(hidden=True))
-
+    print('Dealer Hand is: ')
+    dealer_hand.draw(hidden=True)
     if playing is False:
         print(" --- for a total of " + str(dealer_hand.calculate_value()))
         print("Chip Total: " + str(chip_pool))
 
     else:
-        print(" with another card hidden upside down")
+        print("with another card hidden upside down")
 
     print('')
     print(result)
@@ -239,7 +238,7 @@ if __name__ == "__main__":
     deck = PlayingDeck()
     deck.shuffle()
     player_hand = Hand()
-    deal_hand = Hand()
+    dealer_hand = Hand()
 
     intro()
     deal_cards()
