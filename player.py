@@ -38,14 +38,22 @@ class Hand:
     def hit(self, card):
         self.cards.append(card)
 
-        if card == 'A':
+        if card[1] == 'A':
             self.ace = True
         self.game_points += all_cards_val[card[1]]
+        self.calculate_value()
 
     def calculate_value(self):
+        number_of_aces = 0
+        self.game_points = 0
+        for i in range(0, len(self.cards)):
+            self.game_points += all_cards_val[self.cards[i][1]]
+            if self.cards[i][1] == 'A':
+                number_of_aces += 1
 
-        if self.ace is True and self.game_points < 12:
-            return self.game_points + 10
+        if self.game_points < 12 and self.ace is True:
+            self.game_points += 10
+            return self.game_points
         else:
             return self.game_points
 
@@ -129,8 +137,6 @@ def hit():
     if playing is True:
         if player_hand.calculate_value() <= 21:
             player_hand.hit(game_deck.deal())
-
-        print_hand(player_hand.cards)
 
         if player_hand.calculate_value() > 21:
             result = 'Busted!' + restart_phrase
@@ -231,6 +237,5 @@ Dealer hits until she reaches 17. Aces count as 1 or 11. Card output goes a lett
 
 
 if __name__ == "__main__":
-
     intro()
     deal_cards()
